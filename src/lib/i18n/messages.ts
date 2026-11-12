@@ -801,8 +801,8 @@ const en = {
     allPhotos: "All photos",
   },
   home: {
-    title: "Every guest's photos, in one place.",
-    lead: "Guests scan a QR code, the camera opens, and every picture lands in your private album. Self-hosted, no app, no account.",
+    title: "Snap it. Pin it. See it on the big screen.",
+    lead: "Scan the QR code, the camera opens, and your photo lands on the live wall. No app, no account.",
     admin: "Go to admin",
   },
   guestbook: {
@@ -1653,8 +1653,8 @@ const fr: DeepPartialStrings<Messages> = {
     allPhotos: "Toutes les photos",
   },
   home: {
-    title: "Les photos de tous vos invités, au même endroit.",
-    lead: "Les invités scannent un QR code, l'appareil photo s'ouvre, et chaque photo arrive dans votre album privé. Auto-hébergé, sans appli, sans compte.",
+    title: "Prends-la. Épingle-la. Vois-la sur grand écran.",
+    lead: "Scanne le QR code, l'appareil photo s'ouvre et ta photo arrive sur le mur en direct. Sans appli, sans compte.",
     admin: "Aller à l'admin",
   },
   guestbook: {
@@ -2501,8 +2501,8 @@ const it: DeepPartialStrings<Messages> = {
     allPhotos: "Tutte le foto",
   },
   home: {
-    title: "Le foto di tutti i tuoi ospiti, in un unico posto.",
-    lead: "Gli ospiti scansionano un codice QR, si apre la fotocamera e ogni foto arriva nel tuo album privato. Self-hosted, senza app, senza account.",
+    title: "Scattala. Appendila. Guardala sul maxischermo.",
+    lead: "Scansiona il codice QR, si apre la fotocamera e la tua foto arriva sulla parete live. Senza app, senza account.",
     admin: "Vai all'admin",
   },
   guestbook: {
@@ -3349,8 +3349,8 @@ const es: DeepPartialStrings<Messages> = {
     allPhotos: "Todas las fotos",
   },
   home: {
-    title: "Las fotos de todos tus invitados, en un solo lugar.",
-    lead: "Los invitados escanean un código QR, se abre la cámara y cada foto llega a tu álbum privado. Autoalojado, sin app, sin cuenta.",
+    title: "Hazla. Clávala. Mírala en la pantalla grande.",
+    lead: "Escanea el código QR, se abre la cámara y tu foto llega al muro en directo. Sin app, sin cuenta.",
     admin: "Ir al panel",
   },
   guestbook: {
@@ -4197,8 +4197,8 @@ const de: DeepPartialStrings<Messages> = {
     allPhotos: "Alle Fotos",
   },
   home: {
-    title: "Die Fotos aller Gäste an einem Ort.",
-    lead: "Gäste scannen einen QR-Code, die Kamera öffnet sich, und jedes Bild landet in deinem privaten Album. Selbst gehostet, keine App, kein Konto.",
+    title: "Knipsen. Anpinnen. Auf der großen Leinwand sehen.",
+    lead: "Scanne den QR-Code, die Kamera öffnet sich, und dein Foto landet auf der Live-Wand. Keine App, kein Konto.",
     admin: "Zur Verwaltung",
   },
   guestbook: {

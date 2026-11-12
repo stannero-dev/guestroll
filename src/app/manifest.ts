@@ -6,7 +6,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: config.appName,
     short_name: config.appName,
-    description: "Self-hosted QR-code photo sharing for events.",
+    description: config.credit || "Snap a photo, see it on the big screen.",
     start_url: "/",
     display: "standalone",
     background_color: "#0c0a09",

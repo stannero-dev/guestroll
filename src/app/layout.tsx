@@ -25,7 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
     // Absolute URLs for og:image: crawlers fetch them from outside.
     metadataBase: new URL(await baseUrl()),
     title: { default: config.appName, template: `%s · ${config.appName}` },
-    description: "Self-hosted QR-code photo sharing for events.",
+    description: config.credit || "Snap a photo, see it on the big screen.",
     applicationName: config.appName,
     appleWebApp: { capable: true, title: config.appName, statusBarStyle: "black-translucent" },
     twitter: { card: "summary_large_image" },

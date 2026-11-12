@@ -27,9 +27,10 @@ export function ogFonts() {
 export function OgLogo({ size, ring = OG_COLORS.ink, lens = "#ffc72c" }: { size: number; ring?: string; lens?: string }) {
   return (
     <svg width={size} height={size} viewBox="0 0 512 512">
-      <circle cx="256" cy="256" r="150" fill="none" stroke={ring} strokeWidth="44" />
-      <circle cx="256" cy="256" r="94" fill={lens} />
-      <circle cx="404" cy="108" r="26" fill={ring} />
+      <g transform="rotate(-8 256 256)">
+        <rect x="104" y="72" width="304" height="368" rx="22" fill="none" stroke={ring} strokeWidth="40" />
+        <rect x="150" y="118" width="212" height="196" rx="8" fill={lens} />
+      </g>
     </svg>
   );
 }
