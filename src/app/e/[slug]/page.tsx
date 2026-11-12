@@ -1,3 +1,4 @@
+import { PencilLine } from "lucide-react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { EventTheme } from "@/components/EventTheme";
@@ -83,10 +84,21 @@ export default async function GuestPage({ params, searchParams }: Props) {
       <main lang={locale} className="mx-auto flex min-h-dvh max-w-xl flex-col gap-8 px-5 pt-[max(2rem,env(safe-area-inset-top))] pb-[max(2.5rem,env(safe-area-inset-bottom))]">
         <EventHeader event={publicEvent} locale={locale} />
         {body}
-        <footer className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-4 text-xs text-ink-faint">
-          <a href="https://github.com/achedon12/guestroll" className="hover:text-ink-muted">
-            {config.appName}
-          </a>
+        {config.credit && (
+          <p className="guest-credit mt-auto -mb-4 flex items-center justify-center gap-2 pt-6 text-center text-sm text-ink-muted">
+            <PencilLine className="size-4 shrink-0" aria-hidden />
+            {config.credit}
+          </p>
+        )}
+        <footer className={`${config.credit ? "" : "mt-auto "}flex flex-wrap items-center justify-between gap-3 pt-4 text-xs text-ink-faint`}>
+          {/* With a credit line, it signs the page instead. */}
+          {config.credit ? (
+            <span />
+          ) : (
+            <a href="https://github.com/achedon12/guestroll" className="hover:text-ink-muted">
+              {config.appName}
+            </a>
+          )}
           <span className="flex gap-2">
             <LanguagePicker current={locale} />
             {event.guestStyle === "default" && <ThemeToggle initial={theme} />}

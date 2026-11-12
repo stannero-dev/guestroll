@@ -55,12 +55,14 @@ interface BoardWallProps {
   showQr: boolean;
   caption: (photo: PhotoDto) => string;
   empty: boolean;
+  /** A credit line on a little label at the foot of the board. */
+  credit?: string;
 }
 
 const PRINTS = 7;
 
 /** The wall as a classroom pinboard: prints pinned at an angle, the room's favourites on a lined sheet. */
-export function BoardWall({ eventId, eventName, joinUrl, photos, leadId, top, message, showQr, caption, empty }: BoardWallProps) {
+export function BoardWall({ eventId, eventName, joinUrl, photos, leadId, top, message, showQr, caption, empty, credit = "" }: BoardWallProps) {
   const t = useT();
   const prints = photos.slice(0, PRINTS);
   const side = top.length > 0 || showQr || message;
@@ -140,6 +142,16 @@ export function BoardWall({ eventId, eventName, joinUrl, photos, leadId, top, me
           </aside>
         )}
       </div>
+
+      {credit && (
+        <p
+          className="absolute bottom-[3.2vh] left-[5vh] z-10 -rotate-2 px-[2vh] pt-[1.1vh] pb-[0.9vh] text-[clamp(0.85rem,2.1vh,1.5rem)] leading-none font-bold tracking-tight shadow-md"
+          style={{ backgroundColor: "#e9d3a8", backgroundImage: "repeating-linear-gradient(90deg, rgba(120,80,30,.06) 0 2px, transparent 2px 6px)" }}
+        >
+          <Tape className="-top-[1.3vh] left-1/2 h-[2vh] w-[6vh] -translate-x-1/2 rotate-3" />
+          {credit}
+        </p>
+      )}
     </div>
   );
 }

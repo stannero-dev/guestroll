@@ -24,6 +24,8 @@ interface LiveWallProps {
   joinUrl: string;
   initialStyle: WallStyle;
   challenges: AdminEvent["challenges"];
+  /** The deployment's credit line, on the pinboard; empty shows none. */
+  credit?: string;
 }
 
 /** Polls the admin APIs: the wall runs in a signed-in browser, so it sees exactly what the hosts approved. */
@@ -86,7 +88,7 @@ function useLiveStyle(eventId: string, initial: WallStyle) {
 }
 
 /** Projector mode: new photos jump the queue so the room sees them within seconds. */
-export function LiveWall({ eventId, eventName, joinUrl, initialStyle, challenges }: LiveWallProps) {
+export function LiveWall({ eventId, eventName, joinUrl, initialStyle, challenges, credit = "" }: LiveWallProps) {
   const t = useT();
   const style = useLiveStyle(eventId, initialStyle);
   const { photos, messages, top, fresh } = useWallData(eventId, style);
@@ -160,6 +162,7 @@ export function LiveWall({ eventId, eventName, joinUrl, initialStyle, challenges
         showQr={style.showQr}
         caption={caption}
         empty={empty}
+        credit={credit}
       />
     );
   }

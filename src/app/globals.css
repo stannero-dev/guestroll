@@ -188,6 +188,16 @@ html:has([data-guest-style="chalkboard"]) {
     no-repeat center / contain;
 }
 
+/* The credit at the foot of the board, chalked like a signature. */
+[data-guest-style="chalkboard"] .guest-credit {
+  font-family: var(--font-chalk), "Chalkboard SE", "Comic Sans MS", var(--font-sans);
+  font-size: 1.05rem;
+  color: #fff6c8;
+  rotate: -1.5deg;
+  text-wrap: balance;
+  text-shadow: 0 0 1px rgb(255 255 255 / 0.5);
+}
+
 /* The camera: a sticky note taped to the board. */
 [data-guest-style="chalkboard"] .camera-body {
   border-radius: 6px;

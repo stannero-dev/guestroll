@@ -39,6 +39,8 @@ const dataDir = path.resolve(/*turbopackIgnore: true*/ process.env.DATA_DIR || "
 
 export const config = {
   appName: process.env.APP_NAME?.trim() || "Guestroll",
+  /** A credit line shown at the foot of guest pages and on the live wall ("Made in-house by …"); empty shows none. */
+  credit: process.env.CREDIT_TEXT?.trim().slice(0, 80) || "",
   /** Public origin, used for QR codes. Falls back to the request host when unset. */
   publicUrl: process.env.PUBLIC_URL?.replace(/\/+$/, "") || "",
   locale: oneOf("DEFAULT_LOCALE", LOCALES, "en"),
