@@ -28,6 +28,7 @@ import {
 } from "@/lib/security/request";
 import { storageFull } from "@/lib/storage";
 import { getSpot } from "@/lib/spots";
+import { withLikes } from "@/lib/likes";
 import { isBooth } from "@/lib/booth";
 import { deletePhotoFiles, writePhotoFiles, writeVideoFiles } from "@/lib/storage/files";
 import { InvalidVideoError, probeVideo } from "@/lib/video/probe";
@@ -54,7 +55,7 @@ export async function GET(
   const rows = listPhotos(event, { ...asGuest, shared }, { before, limit: 48 });
   return NextResponse.json(
     {
-      photos: rows.map((p) => toPhotoDto(p, asGuest)),
+      photos: withLikes(rows.map((p) => toPhotoDto(p, asGuest)), viewer.guestId),
       nextCursor: rows.length === 48 ? rows[rows.length - 1].createdAt : null,
     },
     { headers: { "Cache-Control": "private, no-store" } },

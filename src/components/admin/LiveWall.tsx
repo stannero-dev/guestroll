@@ -9,6 +9,7 @@ import type { AdminEvent } from "@/lib/events";
 import type { MessageDto } from "@/lib/messages";
 import type { PhotoDto } from "@/lib/photos";
 import type { WallStyle } from "@/lib/wall";
+import { BoardWall } from "./BoardWall";
 
 const POLL_MS = 5_000;
 const STYLE_POLL_MS = 20_000;
@@ -29,6 +30,7 @@ interface LiveWallProps {
 function useWallData(eventId: string, style: WallStyle) {
   const [photos, setPhotos] = useState<PhotoDto[]>([]);
   const [messages, setMessages] = useState<MessageDto[]>([]);
+  const [top, setTop] = useState<PhotoDto[]>([]);
   const seen = useRef(new Set<string>());
   const fresh = useRef<PhotoDto[]>([]);
 
@@ -47,6 +49,11 @@ function useWallData(eventId: string, style: WallStyle) {
         unseen.forEach((p) => seen.current.add(p.id));
         setPhotos(data.photos.slice(0, 60));
       }
+      // The board shows the guests' ranking beside the prints.
+      if (style.layout === "board") {
+        const liked = await fetch(`/api/admin/events/${eventId}/photos/top?limit=5`).catch(() => null);
+        if (alive && liked?.ok) setTop(((await liked.json()) as { photos: PhotoDto[] }).photos);
+      }
       if (!style.showMessages) return setMessages([]);
       const m = await fetch(`/api/admin/events/${eventId}/messages?status=visible`).catch(() => null);
       if (alive && m?.ok) setMessages(((await m.json()) as { messages: MessageDto[] }).messages.filter((x) => x.text).slice(0, 30));
@@ -57,9 +64,9 @@ function useWallData(eventId: string, style: WallStyle) {
       alive = false;
       clearInterval(timer);
     };
-  }, [eventId, style.favoritesOnly, style.showMessages]);
+  }, [eventId, style.favoritesOnly, style.showMessages, style.layout]);
 
-  return { photos, messages, fresh };
+  return { photos, messages, top, fresh };
 }
 
 /** The hosts may change the wall from another tab: it picks the new settings up without a reload. */
@@ -82,7 +89,7 @@ function useLiveStyle(eventId: string, initial: WallStyle) {
 export function LiveWall({ eventId, eventName, joinUrl, initialStyle, challenges }: LiveWallProps) {
   const t = useT();
   const style = useLiveStyle(eventId, initialStyle);
-  const { photos, messages, fresh } = useWallData(eventId, style);
+  const { photos, messages, top, fresh } = useWallData(eventId, style);
   const [tick, setTick] = useState(0);
   const [current, setCurrent] = useState<Slide | null>(null);
   const index = useRef(0);
@@ -139,6 +146,23 @@ export function LiveWall({ eventId, eventName, joinUrl, initialStyle, challenges
 
   const message = messages.length ? messages[Math.floor(tick / 2) % messages.length] : null;
   const empty = photos.length === 0 && !(current?.kind === "message");
+
+  if (style.layout === "board") {
+    return (
+      <BoardWall
+        eventId={eventId}
+        eventName={eventName}
+        joinUrl={joinUrl}
+        photos={ordered}
+        leadId={lead?.id ?? null}
+        top={top}
+        message={style.showMessages ? message : null}
+        showQr={style.showQr}
+        caption={caption}
+        empty={empty}
+      />
+    );
+  }
 
   return (
     <div className="relative flex h-dvh w-full flex-col overflow-hidden bg-black text-white">

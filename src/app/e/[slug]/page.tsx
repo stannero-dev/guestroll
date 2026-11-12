@@ -18,6 +18,7 @@ import { I18nProvider } from "@/components/I18nProvider";
 import { LanguagePicker } from "@/components/LanguagePicker";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { countGuestPhotos, listPhotos, toPhotoDto } from "@/lib/photos";
+import { withLikes } from "@/lib/likes";
 import { listMessages, toMessageDto } from "@/lib/messages";
 import { canEnterEvent, canJoinFreely, uploadState } from "@/lib/policy";
 import { SLUG_PATTERN } from "@/lib/security/ids";
@@ -63,7 +64,7 @@ export default async function GuestPage({ params, searchParams }: Props) {
       <GuestApp
         event={publicEvent}
         guestName={guest.name ?? null}
-        initialPhotos={rows.map((p) => toPhotoDto(p, asGuest))}
+        initialPhotos={withLikes(rows.map((p) => toPhotoDto(p, asGuest)), asGuest.guestId)}
         initialCursor={rows.length === 48 ? rows[rows.length - 1].createdAt : null}
         closedReason={state.open ? null : state.reason === "locked" ? "closed" : state.reason}
         remaining={event.maxPhotosPerGuest > 0 ? Math.max(event.maxPhotosPerGuest - uploaded, 0) : null}

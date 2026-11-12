@@ -1,7 +1,10 @@
 /** How the live wall looks. Stored as JSON on the event, read through `parseWallStyle`. */
 export interface WallStyle {
-  /** `single`: one print at a time. `mosaic`: the newest big, the previous ones around it. `grid`: a contact sheet of the latest. */
-  layout: "single" | "mosaic" | "grid";
+  /**
+   * `single`: one print at a time. `mosaic`: the newest big, the previous ones around it.
+   * `grid`: a contact sheet of the latest. `board`: a cork board of pinned prints, with the guests' most liked.
+   */
+  layout: "single" | "mosaic" | "grid" | "board";
   slideSeconds: number;
   showNames: boolean;
   showChallenges: boolean;
@@ -12,7 +15,7 @@ export interface WallStyle {
   showMessages: boolean;
 }
 
-export const WALL_LAYOUTS = ["single", "mosaic", "grid"] as const;
+export const WALL_LAYOUTS = ["single", "mosaic", "grid", "board"] as const;
 
 export const DEFAULT_WALL: WallStyle = {
   layout: "single",

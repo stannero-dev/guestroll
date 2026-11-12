@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { apiError, readJson, requireEventAdmin } from "@/lib/http";
+import { withLikes } from "@/lib/likes";
 import { deletePhotos, listPhotos, setFavorite, setPhotoStatus, toPhotoDto, eventBlurThreshold } from "@/lib/photos";
 
 type Context = RouteContext<"/api/admin/events/[id]/photos">;
@@ -25,7 +26,7 @@ export async function GET(request: Request, { params }: Context) {
     status: status && STATUSES.has(status) ? status : undefined,
   });
   return NextResponse.json({
-    photos: rows.map((p) => toPhotoDto(p, { admin: admin.scope }, blurryBelow)),
+    photos: withLikes(rows.map((p) => toPhotoDto(p, { admin: admin.scope }, blurryBelow))),
     nextCursor: rows.length === 100 ? rows[rows.length - 1].createdAt : null,
   });
 }

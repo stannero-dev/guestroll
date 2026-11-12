@@ -114,6 +114,21 @@ export function GuestApp({ event, guestName, initialPhotos, initialCursor, close
     }
   }
 
+  // Optimistic: the heart answers the tap at once, then takes the server's count; a refusal puts it back.
+  async function toggleLike(photo: PhotoDto) {
+    const liked = !photo.liked;
+    const apply = (patch: Partial<PhotoDto>) => {
+      const set = (list: PhotoDto[]) => list.map((p) => (p.id === photo.id ? { ...p, ...patch } : p));
+      setPhotos(set);
+      setAlbum((a) => (a ? { ...a, photos: set(a.photos) } : a));
+    };
+    apply({ liked, likes: Math.max((photo.likes ?? 0) + (liked ? 1 : -1), 0) });
+    const res = await fetch(`/api/e/${event.slug}/photos/${photo.id}/like`, { method: liked ? "POST" : "DELETE" }).catch(() => null);
+    if (res?.ok) apply((await res.json()) as { likes: number; liked: boolean });
+    else apply({ liked: photo.liked, likes: photo.likes });
+  }
+  const onLike = event.albumShared ? toggleLike : undefined;
+
   const shown = view === "all" ? (album?.photos ?? []) : photos;
   const shownCursor = view === "all" ? (album?.cursor ?? null) : cursor;
 
@@ -168,7 +183,7 @@ export function GuestApp({ event, guestName, initialPhotos, initialCursor, close
           <EmptyState>{view === "all" ? (loadingMore ? t("common.loading") : t("guest.emptyAlbum")) : t("guest.emptyMine")}</EmptyState>
         ) : (
           <>
-            <PhotoGrid photos={shown} onOpen={setOpen} />
+            <PhotoGrid photos={shown} onOpen={setOpen} onLike={onLike} />
             {view === "mine" && <p className="text-sm text-ink-muted">{t("guest.deleteHint")}</p>}
           </>
         )}
@@ -203,6 +218,7 @@ export function GuestApp({ event, guestName, initialPhotos, initialCursor, close
           index={open}
           onIndex={setOpen}
           canDownload={(p) => p.mine}
+          onLike={onLike}
           onDelete={async (photo) => {
             const res = await fetch(`/api/e/${event.slug}/photos/${photo.id}`, { method: "DELETE" }).catch(() => null);
             if (!res?.ok) return;

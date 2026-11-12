@@ -100,6 +100,26 @@ export const photos = sqliteTable(
 );
 
 /**
+ * A guest's like on a photo of the shared album: one per guest and photo (the
+ * primary key), gone with the photo. `eventId` is repeated so the event's
+ * ranking is one indexed read.
+ */
+export const photoLikes = sqliteTable(
+  "photo_likes",
+  {
+    photoId: text("photo_id")
+      .notNull()
+      .references(() => photos.id, { onDelete: "cascade" }),
+    guestId: text("guest_id").notNull(),
+    eventId: text("event_id")
+      .notNull()
+      .references(() => events.id, { onDelete: "cascade" }),
+    createdAt: integer("created_at").notNull().default(now),
+  },
+  (t) => [primaryKey({ columns: [t.photoId, t.guestId] }), index("photo_likes_event_idx").on(t.eventId)],
+);
+
+/**
  * A place of the event with its own QR code ("Table 5", "Dance floor"): photos
  * sent after scanning it are tagged with it. Deleting one keeps its photos.
  */

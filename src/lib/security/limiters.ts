@@ -69,6 +69,9 @@ function create() {
     message: new RateLimiter(10, MINUTE),
     messagePerEvent: new RateLimiter(60, MINUTE),
     messagePerIp: new RateLimiter(30, MINUTE),
+    // Likes: a guest scrolling the album taps fast, a script taps faster.
+    like: new RateLimiter(120, MINUTE),
+    likePerIp: new RateLimiter(600, MINUTE),
     // A test email per click is plenty; this stops a stuck button from spamming.
     mailTest: new RateLimiter(5, MINUTE),
   };

@@ -1,7 +1,7 @@
 "use client";
 
 /* eslint-disable @next/next/no-img-element -- photos come from an auth-checked route */
-import { ChevronLeft, ChevronRight, Download, Trash2, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Download, Heart, Trash2, X } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { useT } from "@/components/I18nProvider";
 import { buttonClass } from "@/components/ui";
@@ -15,9 +15,11 @@ interface LightboxProps {
   canDownload: (photo: PhotoDto) => boolean;
   /** Shown on the guest's own photos: they can take them back. */
   onDelete?: (photo: PhotoDto) => Promise<void>;
+  /** The shared album: like the others' photos from the full-size view too. */
+  onLike?: (photo: PhotoDto) => void;
 }
 
-export function Lightbox({ photos, index, onIndex, canDownload, onDelete }: LightboxProps) {
+export function Lightbox({ photos, index, onIndex, canDownload, onDelete, onLike }: LightboxProps) {
   const t = useT();
   const [confirming, setConfirming] = useState<string | null>(null);
   const photo = photos[index];
@@ -39,6 +41,18 @@ export function Lightbox({ photos, index, onIndex, canDownload, onDelete }: Ligh
       <div className="flex items-center justify-between p-3">
         <span className="text-sm text-white/70">{photo.guestName ?? ""}</span>
         <div className="flex gap-2">
+          {onLike && !photo.mine && photo.status === "visible" && (
+            <button
+              type="button"
+              onClick={() => onLike(photo)}
+              aria-pressed={photo.liked ?? false}
+              className={buttonClass("ghost", "sm", "text-white hover:bg-white/10 hover:text-white")}
+            >
+              <Heart className={photo.liked ? "size-4 fill-current text-danger" : "size-4"} aria-hidden />
+              {photo.liked ? t("guest.unlike") : t("guest.like")}
+              {(photo.likes ?? 0) > 0 && <span className="tabular-nums">{photo.likes}</span>}
+            </button>
+          )}
           {onDelete && photo.mine && (
             <button
               type="button"

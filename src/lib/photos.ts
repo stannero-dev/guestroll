@@ -24,6 +24,10 @@ export interface PhotoDto {
   blurry?: boolean;
   /** Admins only: the earlier photo of the event this one repeats. */
   duplicateOf?: string | null;
+  /** Guests' likes, where the caller added them (`withLikes`): the shared album and the admin's lists. */
+  likes?: number;
+  /** Whether the viewing guest liked it. */
+  liked?: boolean;
 }
 
 /**
