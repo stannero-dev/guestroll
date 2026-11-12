@@ -28,9 +28,7 @@ export default async function SystemSettingsPage() {
             </div>
           ))}
         </dl>
-        <a href="https://github.com/achedon12/guestroll" className="inline-block text-sm text-accent underline-offset-2 hover:underline">
-          github.com/achedon12/guestroll
-        </a>
+        <p className="text-sm text-ink-muted">{config.appName}</p>
       </SettingsSection>
     </>
   );

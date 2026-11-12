@@ -38,7 +38,7 @@ export { CAPTURE_MODES, LOCALES, type CaptureMode, type Locale } from "./constan
 const dataDir = path.resolve(/*turbopackIgnore: true*/ process.env.DATA_DIR || "./data");
 
 export const config = {
-  appName: process.env.APP_NAME?.trim() || "Guestroll",
+  appName: process.env.APP_NAME?.trim() || "GCX PicRoll",
   /** A credit line shown at the foot of guest pages and on the live wall ("Made in-house by …"); empty shows none. */
   credit: process.env.CREDIT_TEXT?.trim().slice(0, 80) || "",
   /** Public origin, used for QR codes. Falls back to the request host when unset. */
@@ -169,7 +169,8 @@ export const config = {
     resetCron: process.env.DEMO_RESET_CRON?.trim() || "0 4 * * *",
   },
   /** Ask GitHub every 12 hours whether a newer release exists. */
-  updateCheck: bool("UPDATE_CHECK", true) && !bool("DEMO_MODE", false),
+  // Off by default in this fork: the upstream releases would offer to replace its customisations.
+  updateCheck: bool("UPDATE_CHECK", false) && !bool("DEMO_MODE", false),
   /** The optional updater container (docker-compose profile `updater`): where it listens, and the token they share. */
   updater: {
     url: process.env.UPDATER_URL?.replace(/\/+$/, "") || "",

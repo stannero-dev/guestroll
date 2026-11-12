@@ -16,7 +16,7 @@ interface Form {
   autoExport: boolean;
 }
 
-const EMPTY: Form = { url: "", user: "", password: "", folder: "Guestroll", autoExport: false };
+const EMPTY: Form = { url: "", user: "", password: "", folder: "GCX PicRoll", autoExport: false };
 
 /** The WebDAV server albums are sent to (Nextcloud and the like). */
 export function CloudSettings() {

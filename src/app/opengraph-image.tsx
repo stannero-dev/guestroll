@@ -3,7 +3,7 @@ import { config } from "@/lib/config";
 import { getT } from "@/lib/i18n/server";
 import { OG_COLORS, OG_SIZE, OgLogo, ogFonts } from "@/lib/og";
 
-export const alt = "Guestroll";
+export const alt = "GCX PicRoll";
 export const size = OG_SIZE;
 export const contentType = "image/png";
 

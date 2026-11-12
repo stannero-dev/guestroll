@@ -78,7 +78,7 @@ const en = {
   },
   update: {
     subject: "{app} {version} is available",
-    title: "Guestroll {version} is out.",
+    title: "GCX PicRoll {version} is out.",
     body: "This instance runs {current}. The release notes say what changed and what to check; you can update from the settings.",
     cta: "See the update",
   },
@@ -167,7 +167,7 @@ const fr: Strings<MailMessages> = {
   },
   update: {
     subject: "{app} {version} est disponible",
-    title: "Guestroll {version} est sorti.",
+    title: "GCX PicRoll {version} est sorti.",
     body: "Cette instance tourne en {current}. Les notes de version disent ce qui change et quoi vérifier ; la mise à jour se fait depuis les réglages.",
     cta: "Voir la mise à jour",
   },
@@ -253,7 +253,7 @@ const it: Strings<MailMessages> = {
   },
   update: {
     subject: "{app} {version} è disponibile",
-    title: "È uscito Guestroll {version}.",
+    title: "È uscito GCX PicRoll {version}.",
     body: "Questa istanza usa la {current}. Le note di rilascio dicono cosa cambia e cosa controllare; puoi aggiornare dalle impostazioni.",
     cta: "Vedi l'aggiornamento",
   },
@@ -339,7 +339,7 @@ const es: Strings<MailMessages> = {
   },
   update: {
     subject: "{app} {version} está disponible",
-    title: "Ha salido Guestroll {version}.",
+    title: "Ha salido GCX PicRoll {version}.",
     body: "Esta instancia usa la {current}. Las notas de la versión dicen qué cambia y qué revisar; puedes actualizar desde los ajustes.",
     cta: "Ver la actualización",
   },
@@ -425,7 +425,7 @@ const de: Strings<MailMessages> = {
   },
   update: {
     subject: "{app} {version} ist verfügbar",
-    title: "Guestroll {version} ist erschienen.",
+    title: "GCX PicRoll {version} ist erschienen.",
     body: "Diese Instanz läuft mit {current}. Die Versionshinweise sagen, was sich geändert hat und was du prüfen solltest; du kannst in den Einstellungen aktualisieren.",
     cta: "Update ansehen",
   },

@@ -95,9 +95,7 @@ export default async function GuestPage({ params, searchParams }: Props) {
           {config.credit ? (
             <span />
           ) : (
-            <a href="https://github.com/achedon12/guestroll" className="hover:text-ink-muted">
-              {config.appName}
-            </a>
+            <span>{config.appName}</span>
           )}
           <span className="flex gap-2">
             <LanguagePicker current={locale} />

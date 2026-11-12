@@ -64,7 +64,7 @@ export function albumPdf(event: EventRow, photos: PhotoRow[], layout: AlbumLayou
   const out = new PassThrough();
   // No pdfkit margin: everything is placed by hand, and text below its margin (the
   // page numbers) made it add a blank page after each one.
-  const doc = new PDFDocument({ size: "A4", margin: 0, autoFirstPage: false, info: { Title: event.name, Creator: "Guestroll" } });
+  const doc = new PDFDocument({ size: "A4", margin: 0, autoFirstPage: false, info: { Title: event.name, Creator: "GCX PicRoll" } });
   doc.pipe(out);
   // The event's own font: names and accents print as on screen, in every language.
   doc.registerFont("body", path.join(fontsDir, "BricolageGrotesque-400.woff"));

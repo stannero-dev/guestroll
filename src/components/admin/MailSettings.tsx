@@ -126,7 +126,7 @@ export function MailSettings({ locale }: { locale: string }) {
             </Field>
             <div className="sm:col-span-2">
               <Field label={t("admin.mail.from")} error={fieldError("from")}>
-                {(id) => <Input id={id} value={state.smtp.from} onChange={(e) => setSmtp("from", e.target.value)} placeholder="Guestroll <photos@example.com>" />}
+                {(id) => <Input id={id} value={state.smtp.from} onChange={(e) => setSmtp("from", e.target.value)} placeholder="GCX PicRoll <photos@example.com>" />}
               </Field>
             </div>
             <div className="sm:col-span-2">

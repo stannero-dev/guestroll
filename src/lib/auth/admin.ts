@@ -29,7 +29,7 @@ export const passwordManagedByEnv = (account: Pick<AccountRow, "username">): boo
   Boolean(config.adminPassword) && account.username === config.adminUsername;
 
 function printGenerated(username: string, password: string) {
-  const lines = ["Guestroll admin account (shown once):", `username: ${username}`, `password: ${password}`, "Change it in Admin → Settings, or set ADMIN_PASSWORD."];
+  const lines = ["GCX PicRoll admin account (shown once):", `username: ${username}`, `password: ${password}`, "Change it in Admin → Settings, or set ADMIN_PASSWORD."];
   const width = Math.max(...lines.map((l) => l.length)) + 4;
   const row = (text: string) => `  │  ${text.padEnd(width - 4)}  │`;
   console.log(["", `  ┌${"─".repeat(width)}┐`, ...lines.map(row), `  └${"─".repeat(width)}┘`, ""].join("\n"));
