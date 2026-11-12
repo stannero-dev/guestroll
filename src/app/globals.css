@@ -92,6 +92,111 @@ h3 {
   text-wrap: balance;
 }
 
+/*
+ * Chalkboard guest page (event setting `guestStyle`). A physical object, so
+ * always dark: the tokens are redefined on the page's wrapper and every
+ * component follows. Unlayered on purpose, so it wins over the utilities.
+ */
+[data-guest-style="chalkboard"] {
+  color-scheme: dark;
+  --color-canvas: #24382e;
+  --color-surface: #2d4337;
+  --color-sunken: #1e3027;
+  --color-sunken-2: #192920;
+  --color-line: rgb(244 241 230 / 0.2);
+  --color-line-2: rgb(244 241 230 / 0.34);
+  --color-ink: #f4f1e6;
+  --color-ink-soft: #ddd9ca;
+  --color-ink-muted: #b6c0b2;
+  --color-ink-faint: #8f9b8d;
+  --color-stamp: #ffd54a;
+  --color-danger: #ff8a75;
+  --color-ok: #8fe0a8;
+  color: var(--color-ink);
+  background-color: #24382e;
+  /* Smudges of half-wiped chalk. */
+  background-image:
+    radial-gradient(ellipse 60% 40% at 18% 8%, rgb(255 255 255 / 0.07), transparent 70%),
+    radial-gradient(ellipse 50% 35% at 85% 45%, rgb(255 255 255 / 0.05), transparent 70%),
+    radial-gradient(ellipse 70% 30% at 30% 92%, rgb(255 255 255 / 0.045), transparent 70%);
+  /* The wooden frame: drawn on the board itself, so it scrolls with the page on every phone. */
+  box-shadow:
+    inset 0 0 0 8px #8a5a30,
+    inset 0 0 0 10px #5f3b1c,
+    inset 0 0 40px 10px rgb(0 0 0 / 0.3);
+}
+html:has([data-guest-style="chalkboard"]) {
+  background: #24382e;
+}
+[data-guest-style="chalkboard"] :is(h1, h2, h3) {
+  font-family: var(--font-chalk), "Chalkboard SE", "Comic Sans MS", var(--font-sans);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  text-shadow: 0 0 1px rgb(255 255 255 / 0.5), 0 0 6px rgb(255 255 255 / 0.12);
+}
+[data-guest-style="chalkboard"] h1 {
+  font-size: clamp(2.8rem, 13vw, 5rem);
+  line-height: 0.95;
+}
+/* A wobbly chalk underline under the event name. */
+[data-guest-style="chalkboard"] h1::after {
+  content: "";
+  display: block;
+  width: min(70%, 16rem);
+  height: 10px;
+  margin-top: 0.35rem;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 10' preserveAspectRatio='none'%3E%3Cpath d='M2 6 C 30 2, 50 9, 80 5 S 140 2, 198 6' fill='none' stroke='%23ffd54a' stroke-width='3' stroke-linecap='round' opacity='.9'/%3E%3C/svg%3E")
+    no-repeat center / 100% 100%;
+}
+[data-guest-style="chalkboard"] h2 {
+  font-size: 1.75rem;
+}
+/* Chalk labels: challenge chips, tabs, the shutter's caption. */
+[data-guest-style="chalkboard"] :is([role="radiogroup"], [role="tablist"]) button,
+[data-guest-style="chalkboard"] .camera-body span.font-semibold {
+  font-family: var(--font-chalk), "Chalkboard SE", "Comic Sans MS", var(--font-sans);
+  font-size: 1.15rem;
+  font-weight: 400;
+}
+/* The camera: a sticky note taped to the board. */
+[data-guest-style="chalkboard"] .camera-body {
+  border-radius: 6px;
+  rotate: -0.8deg;
+  box-shadow: 0 10px 24px rgb(0 0 0 / 0.35);
+}
+[data-guest-style="chalkboard"] .camera-body::before,
+[data-guest-style="chalkboard"] li.print::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  width: 84px;
+  height: 22px;
+  translate: -50% 0;
+  rotate: -3deg;
+  background: rgb(255 246 200 / 0.78);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.2);
+  z-index: 1;
+}
+/* Photos as prints taped up at a slant. */
+[data-guest-style="chalkboard"] li.print {
+  box-shadow: 0 6px 14px rgb(0 0 0 / 0.35);
+}
+[data-guest-style="chalkboard"] li.print::before {
+  width: 46px;
+  height: 14px;
+  top: -6px;
+}
+[data-guest-style="chalkboard"] li.print:nth-child(3n + 1) {
+  rotate: -1.6deg;
+}
+[data-guest-style="chalkboard"] li.print:nth-child(3n + 2) {
+  rotate: 1.2deg;
+}
+[data-guest-style="chalkboard"] li.print:nth-child(3n) {
+  rotate: -0.6deg;
+}
+
 /* A print: white border, square corners, the faint shadow of paper on a table. */
 .print {
   background: #fff;

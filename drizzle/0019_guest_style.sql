@@ -1,0 +1,1 @@
+ALTER TABLE `events` ADD `guest_style` text DEFAULT 'default' NOT NULL;

@@ -1,5 +1,6 @@
 "use client";
 
+import { Camera } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/components/ui";
 
@@ -26,8 +27,13 @@ export function ShutterButton({ onClick, disabled, label }: { onClick: () => voi
     >
       <span
         key={pressed}
-        className={cn("size-[86px] rounded-full bg-white shadow-[inset_0_-4px_0_rgb(0_0_0/0.12)]", pressed > 0 && "animate-[shutter_220ms_ease-out]")}
-      />
+        className={cn(
+          "grid size-[86px] place-items-center rounded-full bg-white text-[#1a1b1d] shadow-[inset_0_-4px_0_rgb(0_0_0/0.12)]",
+          pressed > 0 && "animate-[shutter_220ms_ease-out]",
+        )}
+      >
+        <Camera className="size-9" strokeWidth={2.25} aria-hidden />
+      </span>
     </button>
   );
 }

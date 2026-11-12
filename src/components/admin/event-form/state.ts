@@ -1,7 +1,7 @@
 import type { AdminEvent } from "@/lib/events";
 import type { Challenge } from "@/lib/challenges";
 import type { Frame } from "@/lib/effects";
-import type { CaptureMode, Locale } from "@/lib/constants";
+import type { CaptureMode, GuestStyle, Locale } from "@/lib/constants";
 
 /** Form values as the inputs hold them (strings for dates), converted by `toRequestBody`. */
 export interface EventFormState {
@@ -32,6 +32,7 @@ export interface EventFormState {
   captureFilters: boolean;
   allowVideos: boolean;
   frame: Frame;
+  guestStyle: GuestStyle;
   /** New rows have an empty id: the server assigns one. */
   challenges: Challenge[];
 }
@@ -81,6 +82,7 @@ export function initialState(event?: AdminEvent): EventFormState {
     captureFilters: event?.captureFilters ?? false,
     allowVideos: event?.allowVideos ?? false,
     frame: event?.frame ?? "none",
+    guestStyle: event?.guestStyle ?? "default",
   };
 }
 

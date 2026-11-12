@@ -134,6 +134,13 @@
       "when": 1794493588812,
       "tag": "0018_likes",
       "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "6",
+      "when": 1794495437295,
+      "tag": "0019_guest_style",
+      "breakpoints": true
     }
   ]
 }

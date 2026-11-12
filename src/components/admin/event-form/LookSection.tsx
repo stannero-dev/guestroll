@@ -1,7 +1,8 @@
 "use client";
 
 import { useT } from "@/components/I18nProvider";
-import { cn, Switch } from "@/components/ui";
+import { cn, SegmentedControl, Switch } from "@/components/ui";
+import { GUEST_STYLES } from "@/lib/constants";
 import { FRAMES, type Frame } from "@/lib/effects";
 import { FormSection } from "./FormSection";
 import type { SectionProps } from "./state";
@@ -38,6 +39,11 @@ export function LookSection({ form, set }: SectionProps) {
   const t = useT();
   return (
     <FormSection id="look" title={t("admin.look.title")} description={t("admin.form.sectionHints.look")}>
+      <div className="space-y-2">
+        <p className="text-sm font-medium">{t("admin.look.guestStyle")}</p>
+        <SegmentedControl name={t("admin.look.guestStyle")} value={form.guestStyle} options={GUEST_STYLES} onChange={(v) => set("guestStyle", v)} label={(v) => t(`admin.look.guestStyles.${v}`)} />
+        <p className="text-xs text-ink-muted">{t(`admin.look.guestStyleHints.${form.guestStyle}`)}</p>
+      </div>
       <fieldset className="space-y-2">
         <legend className="text-sm font-medium">{t("admin.look.frame")}</legend>
         <div role="radiogroup" aria-label={t("admin.look.frame")} className="grid grid-cols-2 gap-2 sm:grid-cols-4">

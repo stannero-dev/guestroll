@@ -79,7 +79,7 @@ export default async function GuestPage({ params, searchParams }: Props) {
 
   return (
     <I18nProvider locale={locale} messages={messages[locale]}>
-    <EventTheme color={event.accentColor} className="min-h-dvh">
+    <EventTheme color={event.accentColor} className="min-h-dvh" guestStyle={event.guestStyle}>
       <main lang={locale} className="mx-auto flex min-h-dvh max-w-xl flex-col gap-8 px-5 pt-[max(2rem,env(safe-area-inset-top))] pb-[max(2.5rem,env(safe-area-inset-bottom))]">
         <EventHeader event={publicEvent} locale={locale} />
         {body}
@@ -89,7 +89,7 @@ export default async function GuestPage({ params, searchParams }: Props) {
           </a>
           <span className="flex gap-2">
             <LanguagePicker current={locale} />
-            <ThemeToggle initial={theme} />
+            {event.guestStyle === "default" && <ThemeToggle initial={theme} />}
           </span>
         </footer>
       </main>

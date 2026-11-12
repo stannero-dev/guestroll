@@ -539,6 +539,9 @@ const en = {
     },
     look: {
       title: "Look",
+      guestStyle: "Guest page style",
+      guestStyles: { default: "Paper", chalkboard: "Chalkboard" },
+      guestStyleHints: { default: "Clean and neutral, in the event's color.", chalkboard: "A classroom chalkboard: chalk lettering, photos taped up as prints. Always dark, whatever the guest's theme." },
       frame: "Frame",
       frames: {
         none: "None",
@@ -1379,6 +1382,9 @@ const fr: DeepPartialStrings<Messages> = {
     },
     look: {
       title: "Rendu",
+      guestStyle: "Style de la page invités",
+      guestStyles: { default: "Papier", chalkboard: "Tableau noir" },
+      guestStyleHints: { default: "Sobre et neutre, aux couleurs de l'événement.", chalkboard: "Un tableau noir de classe : écriture à la craie, photos scotchées comme des tirages. Toujours sombre, quel que soit le thème de l'invité." },
       frame: "Cadre",
       frames: {
         none: "Aucun",
@@ -2215,6 +2221,9 @@ const it: DeepPartialStrings<Messages> = {
     },
     look: {
       title: "Aspetto",
+      guestStyle: "Stile della pagina ospiti",
+      guestStyles: { default: "Carta", chalkboard: "Lavagna" },
+      guestStyleHints: { default: "Pulito e neutro, nel colore dell'evento.", chalkboard: "Una lavagna di classe: scritte a gesso, foto attaccate come stampe. Sempre scura, qualunque sia il tema dell'ospite." },
       frame: "Cornice",
       frames: {
         none: "Nessuna",
@@ -3051,6 +3060,9 @@ const es: DeepPartialStrings<Messages> = {
     },
     look: {
       title: "Aspecto",
+      guestStyle: "Estilo de la página de invitados",
+      guestStyles: { default: "Papel", chalkboard: "Pizarra" },
+      guestStyleHints: { default: "Limpio y neutro, con el color del evento.", chalkboard: "Una pizarra de clase: letras de tiza, fotos pegadas como copias. Siempre oscura, sea cual sea el tema del invitado." },
       frame: "Marco",
       frames: {
         none: "Ninguno",
@@ -3887,6 +3899,9 @@ const de: DeepPartialStrings<Messages> = {
     },
     look: {
       title: "Aussehen",
+      guestStyle: "Stil der Gästeseite",
+      guestStyles: { default: "Papier", chalkboard: "Tafel" },
+      guestStyleHints: { default: "Schlicht und neutral, in der Farbe des Events.", chalkboard: "Eine Schultafel: Kreideschrift, Fotos als Abzüge angeklebt. Immer dunkel, egal welches Design der Gast nutzt." },
       frame: "Rahmen",
       frames: {
         none: "Keiner",

@@ -34,6 +34,7 @@ export interface PublicEvent {
   guestbookVoice: boolean;
   captureFilters: boolean;
   frame: EventRow["frame"];
+  guestStyle: EventRow["guestStyle"];
   sharedAlbum: EventRow["sharedAlbum"];
   /** The setting applied now: with `after`, false until the event has ended. */
   albumShared: boolean;
@@ -62,6 +63,7 @@ export function toPublicEvent(event: EventRow): PublicEvent {
     guestbookVoice: event.guestbookVoice,
     captureFilters: event.captureFilters,
     frame: event.frame,
+    guestStyle: event.guestStyle,
     sharedAlbum: event.sharedAlbum,
     albumShared: albumShared(event),
     videos: event.allowVideos ? { maxSeconds: config.maxVideoSeconds, maxBytes: config.maxVideoBytes } : null,

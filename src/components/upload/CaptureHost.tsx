@@ -51,7 +51,7 @@ export function CaptureHost({ event, spotId, doneChallenges, closedReason, remai
       {event.challenges.length > 0 && !closedReason && (
         <ChallengePicker challenges={event.challenges} value={challengeId} onChange={setChallengeId} done={doneChallenges} />
       )}
-      <section className="relative rounded-camera bg-accent px-5 pt-5 pb-7 text-accent-ink shadow-[inset_0_-6px_0_rgb(0_0_0/0.08)]">
+      <section className="camera-body relative rounded-camera bg-accent px-5 pt-5 pb-7 text-accent-ink shadow-[inset_0_-6px_0_rgb(0_0_0/0.08)]">
         <div className="flex items-start justify-between gap-3">
           <p className="min-w-0 pt-1 text-[15px] font-semibold text-pretty">{challenge ? t("guest.challengeActive", { label: challenge.label }) : null}</p>
           <ExposureCounter remaining={left} sent={sent} />

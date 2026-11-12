@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Bricolage_Grotesque } from "next/font/google";
+import { Bricolage_Grotesque, Gochi_Hand } from "next/font/google";
 import { I18nProvider } from "@/components/I18nProvider";
 import { config } from "@/lib/config";
 import { messages } from "@/lib/i18n/messages";
@@ -17,6 +17,8 @@ export const dynamic = "force-dynamic";
 // One family for everything: its optical-size axis tightens display sizes and
 // opens up small ones, so body text stays readable without a second face.
 const bricolage = Bricolage_Grotesque({ subsets: ["latin"], variable: "--font-bricolage", axes: ["opsz", "wdth"] });
+// Chalk lettering for the chalkboard guest page: headings and labels only, never body text.
+const chalk = Gochi_Hand({ subsets: ["latin"], weight: "400", variable: "--font-chalk" });
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -45,7 +47,7 @@ export const viewport: Viewport = {
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const [locale, theme] = await Promise.all([getLocale(), getTheme()]);
   return (
-    <html lang={locale} className={bricolage.variable} data-theme={theme === "system" ? undefined : theme}>
+    <html lang={locale} className={`${bricolage.variable} ${chalk.variable}`} data-theme={theme === "system" ? undefined : theme}>
       <body className="min-h-dvh">
         {config.demo.enabled && <DemoBanner nextReset={nextDemoReset()} />}
         <I18nProvider locale={locale} messages={messages[locale]}>{children}</I18nProvider>

@@ -1,5 +1,5 @@
 import { parseEmail } from "@/lib/email";
-import { CAPTURE_MODES, LOCALES, type CaptureMode, type Locale } from "@/lib/constants";
+import { CAPTURE_MODES, GUEST_STYLES, LOCALES, type CaptureMode, type GuestStyle, type Locale } from "@/lib/constants";
 import { parseChallenges } from "@/lib/challenges";
 import { FRAMES, type Frame } from "@/lib/effects";
 import { parseQrStyle } from "@/lib/qr/style";
@@ -34,6 +34,7 @@ export interface EventInput {
   captureFilters: boolean;
   allowVideos: boolean;
   frame: Frame;
+  guestStyle: GuestStyle;
   /** JSON, already normalised by `parseChallenges`. */
   challenges: string;
   /** Already normalised by `parseQrStyle` and serialised. */
@@ -118,6 +119,7 @@ export function parseEventInput(body: unknown, partial: boolean): ValidationResu
     sharedAlbum: ["off", "during", "after"],
     captureMode: CAPTURE_MODES,
     frame: FRAMES,
+    guestStyle: GUEST_STYLES,
   } as const;
   for (const [key, allowed] of Object.entries(enums) as [keyof typeof enums, readonly string[]][]) {
     if (!has(key)) continue;
