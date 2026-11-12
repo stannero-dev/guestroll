@@ -2,7 +2,6 @@
 
 /* eslint-disable @next/next/no-img-element -- photos come from an auth-checked route */
 import { useEffect, useMemo, useRef, useState } from "react";
-import { mediaUrl } from "@/components/guest/PhotoGrid";
 import { useT } from "@/components/I18nProvider";
 import { cn } from "@/components/ui";
 import type { AdminEvent } from "@/lib/events";
@@ -10,6 +9,7 @@ import type { MessageDto } from "@/lib/messages";
 import type { PhotoDto } from "@/lib/photos";
 import type { WallStyle } from "@/lib/wall";
 import { BoardWall } from "./BoardWall";
+import { fetchWallData, fetchWallStyle, useWallMedia, WallMediaProvider, wallQrUrl, type WallSource } from "./wallSource";
 
 const POLL_MS = 5_000;
 const STYLE_POLL_MS = 20_000;
@@ -19,7 +19,8 @@ const MESSAGE_EVERY = 4;
 type Slide = { kind: "photo"; photo: PhotoDto } | { kind: "message"; message: MessageDto };
 
 interface LiveWallProps {
-  eventId: string;
+  /** Where the wall reads from: the admin APIs (signed in) or the public wall link. */
+  source: WallSource;
   eventName: string;
   joinUrl: string;
   initialStyle: WallStyle;
@@ -28,37 +29,29 @@ interface LiveWallProps {
   credit?: string;
 }
 
-/** Polls the admin APIs: the wall runs in a signed-in browser, so it sees exactly what the hosts approved. */
-function useWallData(eventId: string, style: WallStyle) {
+/** Polls the wall's source: it sees exactly what the hosts approved. */
+function useWallData(source: WallSource, style: WallStyle) {
   const [photos, setPhotos] = useState<PhotoDto[]>([]);
   const [messages, setMessages] = useState<MessageDto[]>([]);
   const [top, setTop] = useState<PhotoDto[]>([]);
   const seen = useRef(new Set<string>());
   const fresh = useRef<PhotoDto[]>([]);
+  const key = source.kind === "public" ? source.token : source.eventId;
 
   useEffect(() => {
     let alive = true;
     seen.current = new Set();
     fresh.current = [];
     async function poll() {
-      const query = style.favoritesOnly ? "status=visible&favorites=1" : "status=visible";
-      const res = await fetch(`/api/admin/events/${eventId}/photos?${query}`).catch(() => null);
-      if (alive && res?.ok) {
-        const data = (await res.json()) as { photos: PhotoDto[] };
-        const unseen = data.photos.filter((p) => !seen.current.has(p.id));
-        // The first poll fills the rotation; only later arrivals count as "new".
-        if (seen.current.size > 0) fresh.current.push(...unseen.reverse());
-        unseen.forEach((p) => seen.current.add(p.id));
-        setPhotos(data.photos.slice(0, 60));
-      }
-      // The board shows the guests' ranking beside the prints.
-      if (style.layout === "board") {
-        const liked = await fetch(`/api/admin/events/${eventId}/photos/top?limit=5`).catch(() => null);
-        if (alive && liked?.ok) setTop(((await liked.json()) as { photos: PhotoDto[] }).photos);
-      }
-      if (!style.showMessages) return setMessages([]);
-      const m = await fetch(`/api/admin/events/${eventId}/messages?status=visible`).catch(() => null);
-      if (alive && m?.ok) setMessages(((await m.json()) as { messages: MessageDto[] }).messages.filter((x) => x.text).slice(0, 30));
+      const data = await fetchWallData(source, style);
+      if (!alive || !data) return;
+      const unseen = data.photos.filter((p) => !seen.current.has(p.id));
+      // The first poll fills the rotation; only later arrivals count as "new".
+      if (seen.current.size > 0) fresh.current.push(...unseen.reverse());
+      unseen.forEach((p) => seen.current.add(p.id));
+      setPhotos(data.photos);
+      setTop(data.top);
+      setMessages(style.showMessages ? data.messages : []);
     }
     void poll();
     const timer = setInterval(poll, POLL_MS);
@@ -66,32 +59,41 @@ function useWallData(eventId: string, style: WallStyle) {
       alive = false;
       clearInterval(timer);
     };
-  }, [eventId, style.favoritesOnly, style.showMessages, style.layout]);
+    // The source is identified by its key: a new object for the same wall must not restart polling.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [key, style.favoritesOnly, style.showMessages, style.layout]);
 
   return { photos, messages, top, fresh };
 }
 
 /** The hosts may change the wall from another tab: it picks the new settings up without a reload. */
-function useLiveStyle(eventId: string, initial: WallStyle) {
+function useLiveStyle(source: WallSource, initial: WallStyle) {
   const [style, setStyle] = useState(initial);
+  const key = source.kind === "public" ? source.token : source.eventId;
   useEffect(() => {
     const timer = setInterval(async () => {
-      const res = await fetch(`/api/admin/events/${eventId}`).catch(() => null);
-      if (res?.ok) {
-        const next = ((await res.json()) as { event: AdminEvent }).event.wallStyle;
-        setStyle((current) => (JSON.stringify(current) === JSON.stringify(next) ? current : next));
-      }
+      const next = await fetchWallStyle(source);
+      if (next) setStyle((current) => (JSON.stringify(current) === JSON.stringify(next) ? current : next));
     }, STYLE_POLL_MS);
     return () => clearInterval(timer);
-  }, [eventId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [key]);
   return style;
 }
 
 /** Projector mode: new photos jump the queue so the room sees them within seconds. */
-export function LiveWall({ eventId, eventName, joinUrl, initialStyle, challenges, credit = "" }: LiveWallProps) {
+export function LiveWall(props: LiveWallProps) {
+  return (
+    <WallMediaProvider source={props.source}>
+      <Wall {...props} />
+    </WallMediaProvider>
+  );
+}
+
+function Wall({ source, eventName, joinUrl, initialStyle, challenges, credit = "" }: LiveWallProps) {
   const t = useT();
-  const style = useLiveStyle(eventId, initialStyle);
-  const { photos, messages, top, fresh } = useWallData(eventId, style);
+  const style = useLiveStyle(source, initialStyle);
+  const { photos, messages, top, fresh } = useWallData(source, style);
   const [tick, setTick] = useState(0);
   const [current, setCurrent] = useState<Slide | null>(null);
   const index = useRef(0);
@@ -152,7 +154,7 @@ export function LiveWall({ eventId, eventName, joinUrl, initialStyle, challenges
   if (style.layout === "board") {
     return (
       <BoardWall
-        eventId={eventId}
+        qrUrl={wallQrUrl(source)}
         eventName={eventName}
         joinUrl={joinUrl}
         photos={ordered}
@@ -193,7 +195,7 @@ export function LiveWall({ eventId, eventName, joinUrl, initialStyle, challenges
 
       {style.showQr && (
         <aside className="absolute right-8 bottom-8 flex items-center gap-4 rounded-2xl bg-white p-4 text-[#1a1b1d] shadow-2xl">
-          <img src={`/api/admin/events/${eventId}/qr?format=svg`} alt="" className="size-[16vh] min-h-24" />
+          <img src={wallQrUrl(source)} alt="" className="size-[16vh] min-h-24" />
           <p className="max-w-48 text-[clamp(1rem,2.2vh,1.6rem)] leading-tight font-bold text-balance">{t("admin.wall.scan")}</p>
         </aside>
       )}
@@ -202,6 +204,7 @@ export function LiveWall({ eventId, eventName, joinUrl, initialStyle, challenges
 }
 
 function SingleSlide({ slide, caption }: { slide: Slide | null; caption: (p: PhotoDto) => string }) {
+  const mediaUrl = useWallMedia();
   if (!slide) return null;
   if (slide.kind === "message") {
     return (
@@ -234,6 +237,7 @@ function SingleSlide({ slide, caption }: { slide: Slide | null; caption: (p: Pho
 const TILE_COUNT = { mosaic: 5, grid: 15 } as const;
 
 function TileWall({ layout, photos, caption }: { layout: "mosaic" | "grid"; photos: PhotoDto[]; caption: (p: PhotoDto) => string }) {
+  const mediaUrl = useWallMedia();
   const tiles = photos.slice(0, TILE_COUNT[layout]);
   return (
     <ul role="list" className={cn("grid h-full gap-3", layout === "mosaic" ? "grid-cols-4 grid-rows-2" : "grid-cols-5 grid-rows-3")}>

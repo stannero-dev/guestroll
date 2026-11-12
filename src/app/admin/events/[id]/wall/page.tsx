@@ -13,7 +13,7 @@ export default async function WallPage({ params }: { params: Promise<{ id: strin
   return (
     <EventTheme color={event.accentColor}>
       <LiveWall
-        eventId={event.id}
+        source={{ kind: "admin", eventId: event.id }}
         eventName={event.name}
         joinUrl={await eventUrl(event.slug)}
         initialStyle={readWallStyle(event.wallStyle)}

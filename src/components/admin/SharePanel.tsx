@@ -13,6 +13,7 @@ import { GalleryLinks } from "./GalleryLinks";
 import { QrDesigner } from "./qr/QrDesigner";
 import { SlideshowExport } from "./SlideshowExport";
 import { WallSettings } from "./WallSettings";
+import { PublicWallCard } from "./PublicWallCard";
 import { SpotsCard } from "./SpotsCard";
 import { AlbumPdfCard } from "./AlbumPdfCard";
 import { CloudExportCard } from "./CloudExportCard";
@@ -60,6 +61,8 @@ export function SharePanel({ event, url, locale, purgeAt, favoriteCount, spots, 
       <SlideshowExport eventId={event.id} eventName={event.name} eventDate={event.eventDate} accent={event.accentColor} hasFavorites={favoriteCount > 0} />
 
       <WallSettings eventId={event.id} initial={event.wallStyle} hasChallenges={event.challenges.length > 0} guestbook={event.guestbookEnabled} />
+
+      <PublicWallCard eventId={event.id} initialToken={event.wallToken} />
 
       <div className="grid gap-4 lg:grid-cols-2">
         <Card className="flex flex-col justify-between gap-4">

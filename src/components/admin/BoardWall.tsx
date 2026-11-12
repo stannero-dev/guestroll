@@ -3,7 +3,7 @@
 /* eslint-disable @next/next/no-img-element -- photos come from an auth-checked route */
 import { Heart } from "lucide-react";
 import type { CSSProperties } from "react";
-import { mediaUrl } from "@/components/guest/PhotoGrid";
+import { useWallMedia } from "./wallSource";
 import { useT } from "@/components/I18nProvider";
 import { cn } from "@/components/ui";
 import type { MessageDto } from "@/lib/messages";
@@ -42,7 +42,8 @@ function seed(id: string, salt = 0): number {
 }
 
 interface BoardWallProps {
-  eventId: string;
+  /** The guest QR code's image, from the wall's source. */
+  qrUrl: string;
   eventName: string;
   joinUrl: string;
   /** Newest or leading first: the first is pinned big, the next six around it. */
@@ -62,8 +63,9 @@ interface BoardWallProps {
 const PRINTS = 7;
 
 /** The wall as a classroom pinboard: prints pinned at an angle, the room's favourites on a lined sheet. */
-export function BoardWall({ eventId, eventName, joinUrl, photos, leadId, top, message, showQr, caption, empty, credit = "" }: BoardWallProps) {
+export function BoardWall({ qrUrl, eventName, joinUrl, photos, leadId, top, message, showQr, caption, empty, credit = "" }: BoardWallProps) {
   const t = useT();
+  const mediaUrl = useWallMedia();
   const prints = photos.slice(0, PRINTS);
   const side = top.length > 0 || showQr || message;
 
@@ -135,7 +137,7 @@ export function BoardWall({ eventId, eventName, joinUrl, photos, leadId, top, me
             {showQr && (
               <section className="relative mt-auto flex -rotate-1 items-center gap-[1.6vh] p-[1.6vh] shadow-lg" style={{ backgroundColor: PAPER }}>
                 <Pin color={PINS[1]} />
-                <img src={`/api/admin/events/${eventId}/qr?format=svg`} alt="" className="size-[15vh] min-h-20 shrink-0" />
+                <img src={qrUrl} alt="" className="size-[15vh] min-h-20 shrink-0" />
                 <p className="text-[clamp(0.9rem,2.4vh,1.8rem)] leading-tight font-bold text-balance">{t("admin.wall.scan")}</p>
               </section>
             )}
@@ -162,6 +164,7 @@ export function BoardWall({ eventId, eventName, joinUrl, photos, leadId, top, me
  * padded with bars. `PAD` and `FOOT` are the paper's border and its caption.
  */
 function Print({ photo, big, dropped, text }: { photo: PhotoDto; big: boolean; dropped: boolean; text: string }) {
+  const mediaUrl = useWallMedia();
   const ratio = photo.width > 0 && photo.height > 0 ? photo.width / photo.height : 1;
   const pad = big ? "1.3vh" : "0.8vh";
   const foot = big ? "6vh" : "3.6vh";

@@ -59,6 +59,8 @@ export const events = sqliteTable("events", {
   sharedAlbum: text("shared_album", { enum: ["off", "during", "after"] }).notNull().default("off"),
   /** Secret of the photo booth link (`/e/<slug>/booth?key=`); null when the booth is off. A new one revokes the old link. */
   boothKey: text("booth_key"),
+  /** Secret of the public live wall link (`/w/<token>`): view only, no sign-in. Null when off; a new one revokes the old link. */
+  wallToken: text("wall_token").unique(),
   /** Set once the end-of-event automation ran: it never runs twice for the same event. */
   endedAt: integer("ended_at"),
   createdAt: integer("created_at").notNull().default(now),
